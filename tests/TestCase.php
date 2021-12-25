@@ -59,6 +59,11 @@ abstract class TestCase extends BaseTest
             $table->string('name');
         });
 
+        $builder->create('warehouses', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+        });
+
         $builder->create('reference_models', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
