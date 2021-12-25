@@ -30,7 +30,14 @@ trait HasStock
      |--------------------------------------------------------------------------
      */
 
-    public function stock($date = null)
+    /**
+     * Returns the stock at a given date and warehouse (optionals)
+     *
+     * @param null $date
+     * @param null $warehouse
+     * @return int
+     */
+    public function stock($date = null, $warehouse = null)
     {
         $date = $date ?: Carbon::now();
 
@@ -38,9 +45,16 @@ trait HasStock
             $date = Carbon::create($date);
         }
 
-        return (int) $this->stockMutations()
-            ->where('created_at', '<=', $date->format('Y-m-d H:i:s'))
-            ->sum('amount');
+        $mutations = $this->stockMutations()->where('created_at', '<=', $date->format('Y-m-d H:i:s'));
+
+        if ($warehouse != null) {
+            $mutations->where([
+                'reference_type' => $warehouse::class,
+                'reference_id' => $warehouse->id,
+            ]);
+        }
+
+        return (int) $mutations->sum('amount');
     }
 
     public function increaseStock($amount = 1, $arguments = [])
@@ -71,11 +85,13 @@ trait HasStock
 
     public function setStock($newAmount, $arguments = [])
     {
-        $currentStock = $this->stock;
+        $currentStock = $this->stock(null, $arguments['reference'] ?? null);
 
         if ($deltaStock = $newAmount - $currentStock) {
             return $this->createStockMutation($deltaStock, $arguments);
         }
+
+        return false;
     }
 
     public function inStock($amount = 1)
