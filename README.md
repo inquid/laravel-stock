@@ -12,17 +12,17 @@ Keep stock for Eloquent models. This package will track stock mutations for your
 You can install the package via composer:
 
 ``` bash
-composer require appstract/laravel-stock
+composer require inquid/laravel-stock
 ```
 
-By running `php artisan vendor:publish --provider="Appstract\Stock\StockServiceProvider"` in your project all files for this package will be published. Run `php artisan migrate` to migrate the table. There will now be a `stock_mutations` table in your database.
+By running `php artisan vendor:publish --provider="Inquid\Stock\StockServiceProvider"` in your project all files for this package will be published. Run `php artisan migrate` to migrate the table. There will now be a `stock_mutations` table in your database.
 
 ## Usage
 
 Adding the `HasStock` trait will enable stock functionality on the Model.
 
 ``` php
-use Appstract\Stock\HasStock;
+use Inquid\Stock\HasStock;
 
 class Book extends Model
 {

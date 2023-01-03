@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstract\Stock;
+namespace Inquid\Stock;
 
 use DateTimeInterface;
 use Illuminate\Support\Arr;
