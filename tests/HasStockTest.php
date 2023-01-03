@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstract\Stock\Tests;
+namespace Inquid\Stock\Tests;
 
 use Illuminate\Support\Carbon;
 

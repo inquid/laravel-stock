@@ -1,8 +1,8 @@
 <?php
 
-namespace Appstract\Stock\Tests;
+namespace Inquid\Stock\Tests;
 
-use Appstract\Stock\HasStock;
+use Inquid\Stock\HasStock;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderRow extends Model

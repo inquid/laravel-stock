@@ -1,8 +1,8 @@
 <?php
 
-namespace Appstract\Stock\Tests;
+namespace Inquid\Stock\Tests;
 
-use Appstract\Stock\ReferencedByStockMutations;
+use Inquid\Stock\ReferencedByStockMutations;
 use Illuminate\Database\Eloquent\Model;
 
 class ReferenceModel extends Model

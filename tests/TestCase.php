@@ -1,8 +1,9 @@
 <?php
 
-namespace Appstract\Stock\Tests;
+namespace Inquid\Stock\Tests;
 
-use Appstract\Stock\StockServiceProvider;
+use Illuminate\Foundation\Application;
+use Inquid\Stock\StockServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as BaseTest;
 
@@ -13,7 +14,7 @@ abstract class TestCase extends BaseTest
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param  Application $app
      * @return void
      */
     protected function getEnvironmentSetUp($app)
@@ -85,7 +86,7 @@ abstract class TestCase extends BaseTest
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param  Application $app
      * @return array
      */
     protected function getPackageProviders($app)
@@ -98,7 +99,7 @@ abstract class TestCase extends BaseTest
     /**
      * Get package aliases.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param  Application $app
      * @return array
      */
     protected function getPackageAliases($app)

@@ -2,10 +2,14 @@
     "name": "inquid/laravel-stock",
     "description": "Keep stock for Eloquent models",
     "keywords": [
+        "inquid",
+        "laravel",
+        "stock",
+        "inventory",
         "appstract",
         "laravel-stock"
     ],
-    "homepage": "https://github.com/appstract/laravel-stock",
+    "homepage": "https://github.com/inquid/laravel-stock",
     "license": "MIT",
     "authors": [
         {
@@ -13,23 +17,28 @@
             "email": "gijs@appstract.nl",
             "homepage": "https://appstract.nl",
             "role": "Developer"
+        },
+        {
+            "name": "INQUID SAS de CV",
+            "email": "contact@inquid.co",
+            "homepage": "https://inquid.co"
         }
     ],
     "require": {
         "php": "^7.2|^8.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^v6.23.2",
-        "phpunit/phpunit": "^9.5.10"
+        "orchestra/testbench": "^7.17",
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
-            "Appstract\\Stock\\": "src"
+            "Inquid\\Stock\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Appstract\\Stock\\Tests\\": "tests"
+            "Inquid\\Stock\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -41,10 +50,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Appstract\\Stock\\StockServiceProvider"
+                "Inquid\\Stock\\StockServiceProvider"
             ],
             "aliases": {
-                "Alias": "Appstract\\Stock\\StockFacade"
+                "Alias": "Inquid\\Stock\\StockFacade"
             }
         }
     }
