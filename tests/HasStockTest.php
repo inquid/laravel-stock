@@ -6,11 +6,6 @@ use Illuminate\Support\Carbon;
 
 class HasStockTest extends TestCase
 {
-
-    public function testItWorks(){
-        $this->assertTrue(true);
-    }
-
     /** @test */
     public function it_can_have_no_stock()
     {
