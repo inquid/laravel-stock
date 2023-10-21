@@ -16,6 +16,29 @@ composer require inquid/laravel-stock
 
 By running `php artisan vendor:publish --provider="Inquid\Stock\StockServiceProvider"` in your project all files for this package will be published. Run `php artisan migrate` to migrate the table. There will now be a `stock_mutations` table in your database.
 
+The configuration file looks this:
+```php
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default table name
+    |--------------------------------------------------------------------------
+    |
+    | Table name to use to store mutations.
+    |
+    */
+    
+    'table' => 'stock_mutations',
+    
+    'stock_mutation_model' => Inquid\Stock\StockMutation::class,
+    
+    //'special_date_class' => \MongoDB\BSON\UTCDateTime::class,
+];
+```
+
 ## Usage
 
 Adding the `HasStock` trait will enable stock functionality on the Model.
