@@ -31,15 +31,15 @@ trait HasStock
      | Methods
      |--------------------------------------------------------------------------
      */
-
+    
     /**
      * Returns the stock at a given date and warehouse (optionals)
      *
      * @param null $date
-     * @param null $warehouse
+     * @param array $arguments
      * @return float
      */
-    public function stock($date = null, $warehouse = null): float
+    public function stock($date = null, array $arguments = []): float
     {
         $date = $date ?: Carbon::now();
         
@@ -55,11 +55,20 @@ trait HasStock
         }
         
         $mutations = $this->stockMutations()->where('created_at', '<=', $date);
+        $reference = Arr::get($arguments, 'reference');
+        $warehouse = Arr::get($arguments, 'warehouse');
         
-        if ($warehouse != null) {
+        if ($reference) {
             $mutations->where([
-                'reference_type' => $warehouse::class,
-                'reference_id' => $warehouse->id,
+                'reference_type' => $reference->getMorphClass(),
+                'reference_id' => $reference->getKey(),
+            ]);
+        }
+        
+        if ($warehouse) {
+            $mutations->where([
+                'warehouse_type' => $warehouse->getMorphClass(),
+                'warehouse_id' => $warehouse->getKey(),
             ]);
         }
         
@@ -85,18 +94,45 @@ trait HasStock
 
     public function clearStock($newAmount = null, $arguments = []): bool
     {
-        $this->stockMutations()->delete();
-
-        if (! is_null($newAmount)) {
+        $reference = Arr::get($arguments, 'reference');
+        $warehouse = Arr::get($arguments, 'warehouse');
+        
+        $mutations = $this->stockMutations();
+        
+        if ($reference) {
+            $mutations->where([
+                'reference_type' => $reference->getMorphClass(),
+                'reference_id' => $reference->getKey(),
+            ]);
+        }
+        
+        if ($warehouse) {
+            $mutations->where([
+                'warehouse_type' => $warehouse->getMorphClass(),
+                'warehouse_id' => $warehouse->getKey(),
+            ]);
+        }
+        
+        $mutations->delete();
+        
+        if (!is_null($newAmount)) {
             $this->createStockMutation($newAmount, $arguments);
         }
+
+        return true;
+    }
+    
+    public function moveBetweenStocks(float $amount, Warehouse $source, Warehouse $destination)
+    {
+        $this->decreaseStock($amount, [ 'warehouse' => $source]);
+        $this->increaseStock($amount, [ 'warehouse' => $destination]);
 
         return true;
     }
 
     public function setStock($newAmount, $arguments = []): Model|bool
     {
-        $currentStock = $this->stock(null, $arguments['reference'] ?? null);
+        $currentStock = $this->stock(null, $arguments);
 
         if ($deltaStock = $newAmount - $currentStock) {
             return $this->createStockMutation($deltaStock, $arguments);
@@ -105,27 +141,32 @@ trait HasStock
         return false;
     }
 
-    public function inStock($amount = 1): bool
+    public function inStock($amount = 1, $arguments = []): bool
     {
-        return $this->stock() > 0.0 && $this->stock() >= $amount;
+        $currentStock = $this->stock(null, $arguments);
+
+        return $currentStock > 0.0 && $currentStock >= $amount;
     }
 
-    public function outOfStock(): bool
+    public function outOfStock($arguments = []): bool
     {
-        return $this->stock() <= 0.0;
+        $currentStock = $this->stock(null, $arguments);
+        
+        return $currentStock <= 0.0;
     }
 
     /**
      * Function to handle mutations (increase, decrease).
      *
-     * @param  float  $amount
+     * @param float|int $amount
      * @param  array  $arguments
      * @return Model
      */
-    protected function createStockMutation($amount, $arguments = []): Model
+    protected function createStockMutation(float|int $amount, array $arguments = []): Model
     {
         $reference = Arr::get($arguments, 'reference');
-
+        $warehouse = Arr::get($arguments, 'warehouse');
+        
         $createArguments = collect([
             'amount' => $amount,
             'description' => Arr::get($arguments, 'description'),
@@ -133,6 +174,10 @@ trait HasStock
             return $collection
                 ->put('reference_type', $reference->getMorphClass())
                 ->put('reference_id', $reference->getKey());
+        })->when($warehouse, function ($collection) use ($warehouse) {
+            return $collection
+                ->put('warehouse_type', $warehouse->getMorphClass())
+                ->put('warehouse_id', $warehouse->getKey());
         })->toArray();
 
         return $this->stockMutations()->create($createArguments);
@@ -143,23 +188,34 @@ trait HasStock
      | Scopes
      |--------------------------------------------------------------------------
      */
-
-    public function scopeWhereInStock($query)
+    
+    public function scopeWhereInStock($query, Warehouse $warehouse = null)
     {
-        return $query->where(function ($query) {
-            return $query->whereHas('stockMutations', function ($query) {
-                return $query->select('stockable_id')
+        return $query->where(function ($query) use ($warehouse) {
+            return $query->whereHas('stockMutations', function ($query) use ($warehouse) {
+                return $query
+                    ->select('stockable_id')
+                    ->when($warehouse, function ($query) use ($warehouse) {
+                        return $query
+                            ->where('warehouse_type', $warehouse->getMorphClass())
+                            ->where('warehouse_id', $warehouse->getKey());
+                    })
                     ->groupBy('stockable_id')
                     ->havingRaw('SUM(amount) > 0.0');
             });
         });
     }
-
-    public function scopeWhereOutOfStock($query)
+    
+    public function scopeWhereOutOfStock($query, Warehouse $warehouse = null)
     {
-        return $query->where(function ($query) {
-            return $query->whereHas('stockMutations', function ($query) {
+        return $query->where(function ($query) use ($warehouse) {
+            return $query->whereHas('stockMutations', function ($query) use ($warehouse) {
                 return $query->select('stockable_id')
+                    ->when($warehouse, function ($query) use ($warehouse) {
+                        return $query
+                            ->where('warehouse_type', $warehouse->getMorphClass())
+                            ->where('warehouse_id', $warehouse->getKey());
+                    })
                     ->groupBy('stockable_id')
                     ->havingRaw('SUM(amount) <= 0.0');
             })->orWhereDoesntHave('stockMutations');

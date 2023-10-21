@@ -18,11 +18,14 @@ class CreateStockMutationsTable extends Migration
             $table->morphs('stockable');
             $table->string('reference_type')->nullable();
             $table->unsignedBigInteger('reference_id')->nullable();
+            $table->string('warehouse_type')->nullable();
+            $table->unsignedBigInteger('warehouse_id')->nullable();
             $table->integer('amount');
             $table->text('description')->nullable();
             $table->timestamps();
 
             $table->index(['reference_type', 'reference_id']);
+            $table->index(['warehouse_type', 'warehouse_id']);
         });
     }
 

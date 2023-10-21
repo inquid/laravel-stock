@@ -39,6 +39,13 @@ $book->decreaseStock(10);
 $book->mutateStock(10);
 $book->mutateStock(-10);
 ```
+With warehouse support
+```php
+$book->increaseStock(10, ['warehouse' => $warehouse_first]);
+$book->decreaseStock(10, ['warehouse' => $warehouse_first]);
+$book->mutateStock(10, ['warehouse' => $warehouse_first]);
+$book->mutateStock(-10, ['warehouse' => $warehouse_first]);
+```
 
 ### Clearing stock
 
@@ -47,6 +54,8 @@ It's also possible to clear the stock and directly setting a new value.
 ```php
 $book->clearStock();
 $book->clearStock(10);
+// With warehouse
+$book->clearStock(10, ['warehouse' => $warehouse_first]);
 ```
 
 ### Setting stock
@@ -65,6 +74,12 @@ It's also possible to check if a product is in stock (with a minimal value).
 $book->inStock();
 $book->inStock(10);
 ```
+With warehouse
+```php
+$book->inStock(); // anywhere
+$book->inStock(10);
+$book->inStock(10, ['warehouse' => $warehouse_first]);
+```
 
 ### Current stock
 
@@ -78,6 +93,23 @@ $book->stock(Carbon::now()->subDays(10));
 > **Note:** If you are using MongoDb you need to set the date class in the config file.
 > `'special_date_class' => \MongoDB\BSON\UTCDateTime::class,`
 
+### Current stock in specific warehouse
+
+Get the current stock value (on a certain date) in specific warehouse.
+
+```php
+$book->stock(null, ['warehouse' =>$warehouse_first]);
+$book->stock(Carbon::now()->subDays(10), ['warehouse' =>$warehouse_first]);
+```
+
+### Move between warehouses
+
+Move amount from source warehouse to destination warehouse.
+
+```php
+$book->moveBetweenStocks(5,$warehouse_first, $warehouse_second);
+```
+
 ### Stock arguments
 
 Add a description and/or reference model to de StockMutation.
@@ -87,6 +119,11 @@ $book->increaseStock(10, [
     'description' => 'This is a description',
     'reference' => $otherModel,
 ]);
+```
+
+With warehouse
+```php
+$book->setStock(10, ['warehouse' => $warehouse_first]);
 ```
 
 ### Query Scopes
