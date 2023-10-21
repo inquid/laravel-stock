@@ -42,12 +42,19 @@ trait HasStock
     public function stock($date = null, $warehouse = null): float
     {
         $date = $date ?: Carbon::now();
-
+        
         if (! $date instanceof DateTimeInterface) {
             $date = Carbon::create($date);
         }
         
-        $mutations = $this->stockMutations()->where('created_at', '<=', $date->format('Y-m-d H:i:s'));
+        $specialDateClass = config('stock.special_date_class');
+        if($specialDateClass){
+            $date = new $specialDateClass($date);
+        } else {
+            $date = $date->format('Y-m-d H:i:s');
+        }
+        
+        $mutations = $this->stockMutations()->where('created_at', '<=', $date);
         
         if ($warehouse != null) {
             $mutations->where([
@@ -55,9 +62,9 @@ trait HasStock
                 'reference_id' => $warehouse->id,
             ]);
         }
-
+        
         return (float) $mutations
-            ->where('created_at', '<=', $date->format('Y-m-d H:i:s'))
+            ->where('created_at', '<=', $date)
             ->sum('amount');
     }
 

@@ -75,6 +75,9 @@ $book->stock;
 $book->stock(Carbon::now()->subDays(10));
 ```
 
+> **Note:** If you are using MongoDb you need to set the date class in the config file.
+> `'special_date_class' => \MongoDB\BSON\UTCDateTime::class,`
+
 ### Stock arguments
 
 Add a description and/or reference model to de StockMutation.
