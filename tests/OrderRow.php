@@ -2,8 +2,9 @@
 
 namespace Inquid\Stock\Tests;
 
-use Inquid\Stock\HasStock;
 use Illuminate\Database\Eloquent\Model;
+use Inquid\Stock\HasStock;
+use Inquid\Stock\Tests\Models\StockModel;
 
 class OrderRow extends Model
 {

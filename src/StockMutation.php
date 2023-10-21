@@ -3,6 +3,7 @@
 namespace Inquid\Stock;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class StockMutation extends Model
 {
@@ -28,7 +29,7 @@ class StockMutation extends Model
     /**
      * Relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @return MorphTo
      */
     public function stockable()
     {
@@ -38,7 +39,7 @@ class StockMutation extends Model
     /**
      * Relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @return MorphTo
      */
     public function reference()
     {

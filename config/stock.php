@@ -12,5 +12,4 @@ return [
     */
 
     'table' => 'stock_mutations',
-
 ];

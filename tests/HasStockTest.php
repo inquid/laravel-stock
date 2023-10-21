@@ -3,6 +3,7 @@
 namespace Inquid\Stock\Tests;
 
 use Illuminate\Support\Carbon;
+use Inquid\Stock\Tests\Models\WarehouseModel;
 
 class HasStockTest extends TestCase
 {
@@ -27,6 +28,30 @@ class HasStockTest extends TestCase
         $this->stockModel->setStock(8.94);
 
         $this->assertEquals(8.94, $this->stockModel->stock);
+    }
+
+    /** @test */
+    public function test_system_can_handle_multiple_warehouses()
+    {
+        $warehouse = WarehouseModel::create(['name' => 'JFK']);
+        $this->stockModel->setStock(5);
+        $this->stockModel->setStock(10, ['reference' => $warehouse]);
+        $this->assertEquals(10, $this->stockModel->stock(null, $warehouse));
+
+        $laWarehouse = WarehouseModel::create(['name' => 'LAX']);
+        $this->stockModel->increaseStock(3, ['reference' => $laWarehouse]);
+        $this->assertEquals(3, $this->stockModel->stock(null, $laWarehouse));
+
+        $sfoWarehouse = WarehouseModel::create(['name' => 'SFO']);
+        $this->stockModel->increaseStock(22, ['reference' => $sfoWarehouse]);
+        $this->assertEquals(22, $this->stockModel->stock(null, $sfoWarehouse));
+
+        // Let's assert that other stocks in other warehouses remain the same
+
+        // All
+        $this->assertEquals(40, $this->stockModel->stock);
+        $this->assertEquals(10, $this->stockModel->stock(null, $warehouse));
+        $this->assertEquals(3, $this->stockModel->stock(null, $laWarehouse));
     }
 
     /** @test */

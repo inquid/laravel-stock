@@ -2,9 +2,10 @@
 
 namespace Inquid\Stock\Tests;
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Inquid\Stock\StockServiceProvider;
-use Illuminate\Database\Schema\Blueprint;
+use Inquid\Stock\Tests\Models\StockModel;
 use Orchestra\Testbench\TestCase as BaseTest;
 
 abstract class TestCase extends BaseTest
@@ -56,6 +57,11 @@ abstract class TestCase extends BaseTest
 
         // Create tables
         $builder->create('stock_models', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+        });
+
+        $builder->create('warehouses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });

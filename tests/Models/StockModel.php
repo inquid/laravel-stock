@@ -1,9 +1,9 @@
 <?php
 
-namespace Inquid\Stock\Tests;
+namespace Inquid\Stock\Tests\Models;
 
-use Inquid\Stock\HasStock;
 use Illuminate\Database\Eloquent\Model;
+use Inquid\Stock\HasStock;
 
 class StockModel extends Model
 {
