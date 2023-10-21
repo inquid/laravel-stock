@@ -4,6 +4,7 @@ namespace Inquid\Stock\Tests;
 
 use Inquid\Stock\HasStock;
 use Illuminate\Database\Eloquent\Model;
+use Inquid\Stock\Models\StockModel;
 
 class OrderRow extends Model
 {

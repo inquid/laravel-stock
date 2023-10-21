@@ -1,6 +1,6 @@
 <?php
 
-namespace Inquid\Stock\Tests;
+namespace Inquid\Stock\Models;
 
 use Inquid\Stock\HasStock;
 use Illuminate\Database\Eloquent\Model;

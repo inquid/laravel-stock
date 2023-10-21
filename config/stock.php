@@ -1,5 +1,9 @@
 <?php
 
+
+use Inquid\Stock\Models\StockModel;
+use Inquid\Stock\Models\WarehouseModel;
+
 return [
 
     /*
@@ -12,5 +16,10 @@ return [
     */
 
     'table' => 'stock_mutations',
+    
+    'models' => [
+        'stock' => StockModel::class,
+        'warehouse' => WarehouseModel::class,
+    ],
 
 ];

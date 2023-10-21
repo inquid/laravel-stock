@@ -3,6 +3,7 @@
 namespace Inquid\Stock\Tests;
 
 use Illuminate\Support\Carbon;
+use Inquid\Stock\Models\WarehouseModel;
 
 class HasStockTest extends TestCase
 {

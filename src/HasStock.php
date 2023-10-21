@@ -3,8 +3,11 @@
 namespace Inquid\Stock;
 
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\morphMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Inquid\Stock\StockMutation;
 
 trait HasStock
 {
@@ -35,9 +38,9 @@ trait HasStock
      *
      * @param null $date
      * @param null $warehouse
-     * @return int
+     * @return float
      */
-    public function stock($date = null, $warehouse = null)
+    public function stock($date = null, $warehouse = null): float
     {
         $date = $date ?: Carbon::now();
 
@@ -59,22 +62,22 @@ trait HasStock
             ->sum('amount');
     }
 
-    public function increaseStock($amount = 1, $arguments = [])
+    public function increaseStock($amount = 1, $arguments = []): Model
     {
         return $this->createStockMutation($amount, $arguments);
     }
 
-    public function decreaseStock($amount = 1, $arguments = [])
+    public function decreaseStock($amount = 1, $arguments = []): Model
     {
         return $this->createStockMutation(-1 * abs($amount), $arguments);
     }
 
-    public function mutateStock($amount = 1, $arguments = [])
+    public function mutateStock($amount = 1, $arguments = []): Model
     {
         return $this->createStockMutation($amount, $arguments);
     }
 
-    public function clearStock($newAmount = null, $arguments = [])
+    public function clearStock($newAmount = null, $arguments = []): bool
     {
         $this->stockMutations()->delete();
 
@@ -85,7 +88,7 @@ trait HasStock
         return true;
     }
 
-    public function setStock($newAmount, $arguments = [])
+    public function setStock($newAmount, $arguments = []): Model
     {
         $currentStock = $this->stock(null, $arguments['reference'] ?? null);
 
@@ -96,12 +99,12 @@ trait HasStock
         return false;
     }
 
-    public function inStock($amount = 1)
+    public function inStock($amount = 1): bool
     {
         return $this->stock > 0.0 && $this->stock >= $amount;
     }
 
-    public function outOfStock()
+    public function outOfStock(): bool
     {
         return $this->stock <= 0.0;
     }
@@ -111,9 +114,9 @@ trait HasStock
      *
      * @param  float  $amount
      * @param  array  $arguments
-     * @return bool
+     * @return Model
      */
-    protected function createStockMutation($amount, $arguments = [])
+    protected function createStockMutation($amount, $arguments = []): Model
     {
         $reference = Arr::get($arguments, 'reference');
 
@@ -166,9 +169,9 @@ trait HasStock
     /**
      * Relation with StockMutation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\morphMany
+     * @return morphMany
      */
-    public function stockMutations()
+    public function stockMutations(): morphMany
     {
         return $this->morphMany(StockMutation::class, 'stockable');
     }

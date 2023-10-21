@@ -3,6 +3,7 @@
 namespace Inquid\Stock\Tests;
 
 use Illuminate\Foundation\Application;
+use Inquid\Stock\Models\StockModel;
 use Inquid\Stock\StockServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as BaseTest;

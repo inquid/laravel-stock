@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstract\Stock\Tests;
+namespace Inquid\Stock\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

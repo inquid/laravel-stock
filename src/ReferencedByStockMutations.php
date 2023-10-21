@@ -2,14 +2,16 @@
 
 namespace Inquid\Stock;
 
+use Illuminate\Database\Eloquent\Relations\morphMany;
+
 trait ReferencedByStockMutations
 {
     /**
      * Relation with StockMutation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\morphMany
+     * @return morphMany
      */
-    public function stockMutations()
+    public function stockMutations(): morphMany
     {
         return $this->morphMany(StockMutation::class, 'reference');
     }

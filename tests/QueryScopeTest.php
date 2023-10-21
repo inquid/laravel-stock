@@ -2,6 +2,8 @@
 
 namespace Inquid\Stock\Tests;
 
+use Inquid\Stock\Models\StockModel;
+
 class QueryScopeTest extends TestCase
 {
     /** @test */
