@@ -17,7 +17,7 @@ trait HasStock
     /**
      * Stock accessor.
      *
-     * @return int
+     * @return float
      */
     public function getStockAttribute()
     {
@@ -44,9 +44,9 @@ trait HasStock
         if (! $date instanceof DateTimeInterface) {
             $date = Carbon::create($date);
         }
-
+        
         $mutations = $this->stockMutations()->where('created_at', '<=', $date->format('Y-m-d H:i:s'));
-
+        
         if ($warehouse != null) {
             $mutations->where([
                 'reference_type' => $warehouse::class,
@@ -54,7 +54,9 @@ trait HasStock
             ]);
         }
 
-        return (int) $mutations->sum('amount');
+        return (float) $mutations
+            ->where('created_at', '<=', $date->format('Y-m-d H:i:s'))
+            ->sum('amount');
     }
 
     public function increaseStock($amount = 1, $arguments = [])
@@ -96,18 +98,18 @@ trait HasStock
 
     public function inStock($amount = 1)
     {
-        return $this->stock > 0 && $this->stock >= $amount;
+        return $this->stock > 0.0 && $this->stock >= $amount;
     }
 
     public function outOfStock()
     {
-        return $this->stock <= 0;
+        return $this->stock <= 0.0;
     }
 
     /**
      * Function to handle mutations (increase, decrease).
      *
-     * @param  int $amount
+     * @param  float  $amount
      * @param  array  $arguments
      * @return bool
      */
@@ -139,7 +141,7 @@ trait HasStock
             return $query->whereHas('stockMutations', function ($query) {
                 return $query->select('stockable_id')
                     ->groupBy('stockable_id')
-                    ->havingRaw('SUM(amount) > 0');
+                    ->havingRaw('SUM(amount) > 0.0');
             });
         });
     }
@@ -150,7 +152,7 @@ trait HasStock
             return $query->whereHas('stockMutations', function ($query) {
                 return $query->select('stockable_id')
                     ->groupBy('stockable_id')
-                    ->havingRaw('SUM(amount) <= 0');
+                    ->havingRaw('SUM(amount) <= 0.0');
             })->orWhereDoesntHave('stockMutations');
         });
     }
