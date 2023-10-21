@@ -68,9 +68,9 @@ class StockMutationsTest extends TestCase
         $stockMutation = $this->stockModel->stockMutations->first();
         $referenceMutation = $this->referenceModel->stockMutations->first();
 
-        $this->assertEquals(1, $stockMutation->reference_id);
-        $this->assertEquals(ReferenceModel::class, $stockMutation->reference_type);
-        $this->assertEquals(1, $referenceMutation->stockable_id);
-        $this->assertEquals(StockModel::class, $referenceMutation->stockable_type);
+        $this->assertSame(1, $stockMutation->reference_id);
+        $this->assertSame(ReferenceModel::class, $stockMutation->reference_type);
+        $this->assertSame(1, $referenceMutation->stockable_id);
+        $this->assertSame(StockModel::class, $referenceMutation->stockable_type);
     }
 }
