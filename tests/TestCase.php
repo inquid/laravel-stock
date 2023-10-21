@@ -2,10 +2,10 @@
 
 namespace Inquid\Stock\Tests;
 
-use Illuminate\Foundation\Application;
-use Inquid\Stock\Models\StockModel;
-use Inquid\Stock\StockServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Application;
+use Inquid\Stock\StockServiceProvider;
+use Inquid\Stock\Tests\Models\StockModel;
 use Orchestra\Testbench\TestCase as BaseTest;
 
 abstract class TestCase extends BaseTest

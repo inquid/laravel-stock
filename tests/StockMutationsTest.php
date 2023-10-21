@@ -2,7 +2,7 @@
 
 namespace Inquid\Stock\Tests;
 
-use Inquid\Stock\Models\StockModel;
+use Inquid\Stock\Tests\Models\StockModel;
 
 class StockMutationsTest extends TestCase
 {
