@@ -94,7 +94,7 @@ trait HasStock
         return true;
     }
 
-    public function setStock($newAmount, $arguments = []): Model
+    public function setStock($newAmount, $arguments = []): Model|bool
     {
         $currentStock = $this->stock(null, $arguments['reference'] ?? null);
 
@@ -107,12 +107,12 @@ trait HasStock
 
     public function inStock($amount = 1): bool
     {
-        return $this->stock > 0.0 && $this->stock >= $amount;
+        return $this->stock() > 0.0 && $this->stock() >= $amount;
     }
 
     public function outOfStock(): bool
     {
-        return $this->stock <= 0.0;
+        return $this->stock() <= 0.0;
     }
 
     /**
