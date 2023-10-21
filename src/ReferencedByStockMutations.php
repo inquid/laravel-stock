@@ -13,6 +13,6 @@ trait ReferencedByStockMutations
      */
     public function stockMutations(): morphMany
     {
-        return $this->morphMany(StockMutation::class, 'reference');
+        return $this->morphMany(config('stock.stock_mutation_model'), 'reference');
     }
 }

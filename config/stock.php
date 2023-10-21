@@ -12,4 +12,6 @@ return [
     */
 
     'table' => 'stock_mutations',
+    
+    'stock_mutation_model' => Inquid\Stock\StockMutation::class,
 ];

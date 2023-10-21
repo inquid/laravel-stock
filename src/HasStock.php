@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\morphMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Inquid\Stock\StockMutation;
 
 trait HasStock
 {
@@ -173,6 +172,6 @@ trait HasStock
      */
     public function stockMutations(): morphMany
     {
-        return $this->morphMany(StockMutation::class, 'stockable');
+        return $this->morphMany(config('stock.stock_mutation_model'), 'stockable');
     }
 }

@@ -20,6 +20,8 @@ By running `php artisan vendor:publish --provider="Inquid\Stock\StockServiceProv
 
 Adding the `HasStock` trait will enable stock functionality on the Model.
 
+> **Note:** If you need to use a custom Model for example for MongoDB you can update the model to use in the config file `stock.php`.
+
 ``` php
 use Inquid\Stock\HasStock;
 
