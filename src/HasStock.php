@@ -73,7 +73,6 @@ trait HasStock
         }
         
         return (float) $mutations
-            ->where('created_at', '<=', $date)
             ->sum('amount');
     }
 
