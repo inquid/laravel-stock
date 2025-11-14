@@ -188,7 +188,7 @@ trait HasStock
      |--------------------------------------------------------------------------
      */
     
-    public function scopeWhereInStock($query, Warehouse $warehouse = null)
+    public function scopeWhereInStock($query, ?Warehouse $warehouse = null)
     {
         return $query->where(function ($query) use ($warehouse) {
             return $query->whereHas('stockMutations', function ($query) use ($warehouse) {
@@ -205,7 +205,7 @@ trait HasStock
         });
     }
     
-    public function scopeWhereOutOfStock($query, Warehouse $warehouse = null)
+    public function scopeWhereOutOfStock($query, ?Warehouse $warehouse = null)
     {
         return $query->where(function ($query) use ($warehouse) {
             return $query->whereHas('stockMutations', function ($query) use ($warehouse) {
