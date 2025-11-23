@@ -41,6 +41,11 @@ trait HasStock
      */
     public function stock($date = null, array $arguments = []): float
     {
+        if (is_array($date) && empty($arguments)) {
+            $arguments = $date;
+            $date = null;
+        }
+
         $date = $date ?: Carbon::now();
         
         if (! $date instanceof DateTimeInterface) {

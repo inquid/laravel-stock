@@ -193,4 +193,13 @@ class HasStockTest extends TestCase
         $this->assertEquals(2, $this->stockModel->stock(Carbon::now()->subDays(14)->subMinutes(1)));
         $this->assertEquals(6, $this->stockModel->stock(Carbon::now()->subDays(14)->addMinutes(1)));
     }
+
+    /** @test */
+    public function it_can_fetch_stock_for_arguments_without_explicit_date_parameter()
+    {
+        $warehouse = WarehouseModel::create(['name' => 'ORD']);
+        $this->stockModel->setStock(12, ['warehouse' => $warehouse]);
+
+        $this->assertEquals(12, $this->stockModel->stock(['warehouse' => $warehouse]));
+    }
 }
